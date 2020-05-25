@@ -10,6 +10,9 @@
 </template>
 
 <script>
+    import gql from 'graphql-tag'
+    import constants from '../constants'
+
     export default {
         name: 'Register',
         data() {
@@ -21,7 +24,21 @@
             }
         },
         methods: {
-            register() {
+            async register() {
+                const result = await this.$apollo.mutate({
+                    mutation: gql`mutation($password:String!,$username:String!){
+                        register (password: $password, username:$username) {
+                            ok
+                            accessToken
+                        }
+                    }`,
+                    variables: {
+                        password: this.input.password,
+                        username : this.input.username
+                    },
+                })
+                console.log(result.data.register.accessToken)
+                localStorage.setItem(constants.token,result.data.register.accessToken)
                 console.log(this.input.username + " : " + this.input.password)
             },
             moveToLogin(){

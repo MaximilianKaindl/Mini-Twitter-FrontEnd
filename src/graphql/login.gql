@@ -1,0 +1,6 @@
+
+mutation login ($input: MessageInput!) {
+  addMessage (input: $input) {
+    ...Message
+  }
+}

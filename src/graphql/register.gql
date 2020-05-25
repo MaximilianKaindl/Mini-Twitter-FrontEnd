@@ -1,0 +1,6 @@
+mutation register ($input: MessageInput!) {
+  register (password: $input.password, username:$input.username) {
+    ok
+    accessToken
+  }
+}

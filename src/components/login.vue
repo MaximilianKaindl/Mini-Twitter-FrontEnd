@@ -9,7 +9,8 @@
 </template>
 
 <script>
-    //import gql from "graphql-tag"
+    import gql from "graphql-tag"
+    import constants from '../constants'
 
     export default {
         name: 'Login',
@@ -22,20 +23,26 @@
             }
         },
         methods: {
-            login() {
+            async login() {
                 if(this.input.usernameInput != "" && this.input.passwordInput != "") {
-                    /*this.$apollo.mutate({
-                        mutation: gql`mutation(){
-                            auth(){
-                                password: passwordInput
-                                username: usernameInput
+                    const result = await this.$apollo.mutate({
+                    mutation: gql`mutation($password:String!,$username:String!){
+                            auth (password: $password, username:$username) {
+                                ok
+                                accessToken
                             }
-                        }
-                    })*/
-                    if(this.input.usernameInput == this.$parent.mockAccount.usernameInput && this.input.passwordInput == this.$parent.mockAccount.passwordInput) {
+                        }`,
+                        variables: {
+                            password: this.input.passwordInput,
+                            username : this.input.usernameInput
+                        },
+                    })
+                    if(result.data.auth.ok){
+                        localStorage.setItem(constants.token,result.data.auth.accessToken)
                         this.$emit("authenticated", true);
                         this.$router.replace({ name: "secure" });
-                    } else {
+                    }                        
+                    else {
                         console.log("The username and / or password is incorrect");
                     }
                 } else {
