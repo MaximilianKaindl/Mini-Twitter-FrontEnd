@@ -1,10 +1,12 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+    <b-container fluid>
+        <div id="app">
+            <div id="nav">
+                <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+            </div>
+            <router-view @authenticated="setAuthenticated" />
         </div>
-        <router-view @authenticated="setAuthenticated" />
-    </div>
+    </b-container>
 </template>
 
 <script>

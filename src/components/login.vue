@@ -1,11 +1,29 @@
 <template>
-    <div id="login">
-        <h1>Login</h1>
-            <input type="text" name="usernameInput" v-model="input.usernameInput" placeholder="Username" />
-            <input type="password" name="passwordInput" v-model="input.passwordInput" placeholder="Password" />
-            <button v-on:click="login()">Login</button>
-            <button ariant="danger" v-on:click="moveToRegister()">No account? Get to registration here!</button>
-        </div>
+    <b-card
+    title="Login"
+    bg-variant="default"
+    >
+        <b-row>
+            <b-col>
+                <b-input type="text" name="usernameInput" v-model="input.usernameInput" placeholder="Username" />
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-input type="password" name="passwordInput" v-model="input.passwordInput" placeholder="Password" />
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-button block variant="primary" v-on:click="login()">Login</b-button>
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-button block variant="outline-primary" v-on:click="moveToRegister()">Registrieren</b-button>
+            </b-col>
+        </b-row>  
+    </b-card>          
 </template>
 
 <script>
@@ -58,12 +76,5 @@
 </script>
 
 <style scoped>
-    login {
-        width: 500px;
-        border: 1px solid #CCCCCC;
-        background-color: #FFFFFF;
-        margin: auto;
-        margin-top: 200px;
-        padding: 20px;
-    }
+
 </style>
