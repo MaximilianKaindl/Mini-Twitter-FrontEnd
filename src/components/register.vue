@@ -1,12 +1,29 @@
 <template>
-    <div id="Register">
-        <h1>Register</h1>
-        <h2>Please enter your username and password to register!</h2>
-        <input type="text" name="username" v-model="input.username" placeholder="Username" />
-        <input type="password" name="password" v-model="input.password" placeholder="Password" />
-        <button type="button" v-on:click="register()">Register</button>
-        <button type="button" v-on:click="moveToLogin()">You have an account? Get to login here!</button>
-    </div>
+    <b-card
+    title="Register"
+    bg-variant="default"
+    >
+        <b-row>
+            <b-col>
+                <b-input type="text" name="usernameInput" v-model="input.usernameInput" placeholder="Username" />
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-input type="password" name="passwordInput" v-model="input.passwordInput" placeholder="Password" />
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-button block variant="primary" v-on:click="register()">Register</b-button>
+            </b-col>
+        </b-row>
+        <b-row class="mt-3">
+            <b-col>
+                <b-button block variant="outline-primary" v-on:click="moveToLogin()">Move to Login</b-button>
+            </b-col>
+        </b-row>  
+    </b-card>          
 </template>
 
 <script>
