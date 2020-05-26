@@ -5,12 +5,12 @@
     >
         <b-row>
             <b-col>
-                <b-input type="text" name="usernameInput" v-model="input.usernameInput" placeholder="Username" />
+                <b-input type="text" name="username" v-model="input.username" placeholder="Username" />
             </b-col>
         </b-row>
         <b-row class="mt-3">
             <b-col>
-                <b-input type="password" name="passwordInput" v-model="input.passwordInput" placeholder="Password" />
+                <b-input type="password" name="password" v-model="input.password" placeholder="Password" />
             </b-col>
         </b-row>
         <b-row class="mt-3">
@@ -54,9 +54,14 @@
                         username : this.input.username
                     },
                 })
-                console.log(result.data.register.accessToken)
-                localStorage.setItem(constants.token,result.data.register.accessToken)
-                console.log(this.input.username + " : " + this.input.password)
+                if(result.data.register.ok){
+                        localStorage.setItem(constants.token,result.data.register.accessToken)
+                        this.$emit("authenticated", true);
+                        this.$router.replace({ name: "secure" });
+                }     
+                else {
+                        console.log("Not ok");
+                }
             },
             moveToLogin(){
                 this.$router.replace({ name: "login" });
