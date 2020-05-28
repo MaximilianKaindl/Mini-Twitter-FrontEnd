@@ -58,7 +58,7 @@
                     if(result.data.auth.ok){
                         localStorage.setItem(constants.token,result.data.auth.accessToken)
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "secure" });
+                        this.$router.replace({ name: "home" });
                     }                        
                     else {
                         console.log("The username and / or password is incorrect");

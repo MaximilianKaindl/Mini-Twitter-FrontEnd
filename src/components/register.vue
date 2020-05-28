@@ -57,7 +57,7 @@
                 if(result.data.register.ok){
                         localStorage.setItem(constants.token,result.data.register.accessToken)
                         this.$emit("authenticated", true);
-                        this.$router.replace({ name: "secure" });
+                        this.$router.replace({ name: "home" });
                 }     
                 else {
                         console.log("Not ok");
