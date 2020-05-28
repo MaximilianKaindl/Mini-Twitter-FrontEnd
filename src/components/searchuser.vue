@@ -20,7 +20,7 @@
         </b-row> 
         <b-row class="mt-3">
             <b-col>
-                <b-button block variant="primary" v-on:click="moveToSettings()">Home</b-button>
+                <b-button block variant="primary" v-on:click="moveToSettings()">Settings</b-button>
             </b-col>
         </b-row> 
     </b-card>          
