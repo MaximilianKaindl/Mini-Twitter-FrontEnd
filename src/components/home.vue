@@ -16,6 +16,11 @@
                 <b-button block variant="primary" v-on:click="sendTweet()">Twittern</b-button>
             </b-col>
         </b-row> 
+        <b-row class="mt-3">
+            <b-col>
+                <b-button block variant="primary" v-on:click="getTweets()">Sync</b-button>
+            </b-col>
+        </b-row> 
          <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="moveToSearchUser()">Search User</b-button>
@@ -40,7 +45,8 @@ import constants from '../constants';
                 message: '',
                 input: {
                     tweet: ""
-                }
+                },
+                users : []
             };
         },
          methods: {
@@ -62,6 +68,23 @@ import constants from '../constants';
                         this.message = "Tweet konnte nicht gesendet werden!"
                     }                 
                 }
+            },
+            async getTweets(){
+                const token = localStorage.getItem(constants.token);
+                const result = await this.$apollo.query({
+                    query: gql`query{
+                        users (token : "${token}") {
+                            ... on UserField {
+  		                        username
+                                tweets {
+                                    content
+                                }
+                            }
+                        }
+                    }`
+                });  
+                this.tweets = result.data;  
+                console.log(this.tweets)
             },
             moveToSearchUser(){
                  this.$router.replace({ name: "searchUser" });
