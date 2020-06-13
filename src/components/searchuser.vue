@@ -13,11 +13,13 @@
                 <b-button block variant="primary" v-on:click="searchUser()">Search</b-button>
             </b-col>
         </b-row> 
-        <p v-for="user in users" v-bind:key="user">
-            {{user.username}}
+
+        <li v-for="user in users" :key="user.username">
+            {{ user.username }}
             <b-button v-on:click="subscribeUser(user.username)">Follow</b-button>
-        </p>
-         <b-row class="mt-3">
+        </li>
+
+        <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="moveToHome()">Home</b-button>
             </b-col>
@@ -41,7 +43,9 @@
                 input: {
                     username: ""
                 },
-                users: []
+                users: {
+                    username: ""
+                }
             };
         },
          methods: {
@@ -55,23 +59,23 @@
                             }
                         }
                     }`
-                });  
-                this.users = result.data;  
-                console.log(this.users);
+                }); 
+                
+                var parsedobj = JSON.parse(JSON.stringify(result.data.users));
+                this.users = parsedobj;  
             },
             async subscribeUser(searchUsername){
-                const result = await this.$apollo.mutate({
-                    mutation: gql`mutation($token:String!,$username:String!){
-                        subscribeUser (token: $token, username:$username) {
+                await this.$apollo.mutate({
+                    mutation: gql`mutation($token:String,$userToSubscribe:String){
+                        subscribeUser (token: $token, userToSubscribe:$userToSubscribe) {
                             ok
                         }
                     }`,
                     variables: {
                         token: localStorage.getItem(constants.token),
-                        username : searchUsername
+                        userToSubscribe : searchUsername
                     },
                 })
-                console.log(result);
             },
             moveToHome(){
                 this.$router.replace({ name: "home" });

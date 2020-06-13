@@ -11,6 +11,16 @@
         <b-row>
             {{message}}
         </b-row>
+
+        <li v-for="user in users" :key="user.username">
+            {{ user.username }}
+            <ul>
+                <li v-for="tweet in user.tweets" :key="tweet.content">
+                    {{ tweet.content}}
+                </li>
+            </ul>
+        </li>
+
         <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="sendTweet()">Twittern</b-button>
@@ -36,7 +46,7 @@
 
 <script>
     import gql from "graphql-tag"
-import constants from '../constants';
+    import constants from '../constants';
 
     export default {
         name: 'Home',
@@ -82,9 +92,11 @@ import constants from '../constants';
                             }
                         }
                     }`
-                });  
-                this.tweets = result.data;  
-                console.log(this.tweets)
+                }); 
+                //var parsedobj = JSON.parse(JSON.stringify(result.data.user));
+                //console.log(parsedobj);
+                this.users = result.data.users;  
+                console.log(this.users)
             },
             moveToSearchUser(){
                  this.$router.replace({ name: "searchUser" });
