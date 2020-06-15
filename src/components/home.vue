@@ -8,24 +8,29 @@
                 <b-input type="text" name="tweet" v-model="input.tweet" placeholder="Was passiert gerade?" />
             </b-col>
         </b-row>
-        <b-row>
-            {{message}}
-        </b-row>
-
-        <li v-for="user in users" :key="user.username">
-            {{ user.username }}
-            <ul>
-                <li v-for="tweet in user.tweets" :key="tweet.content">
-                    {{ tweet.content}}
-                </li>
-            </ul>
-        </li>
-
         <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="sendTweet()">Twittern</b-button>
             </b-col>
         </b-row> 
+
+        <b-row>
+            {{message}}
+        </b-row>
+
+        <div v-for="subUser in subscribedUsers" :key="subUser">             
+            <div v-for="user in subUser.subscribedUsers" :key="user.username">
+                <div v-for="tweet in user.tweets" :key="tweet.content">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{tweet.content}}</h5>
+                            <p class="card-text">{{user.username}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="getTweets()">Sync</b-button>
@@ -56,7 +61,7 @@
                 input: {
                     tweet: ""
                 },
-                users : []
+                subscribedUsers : []
             };
         },
          methods: {
@@ -81,22 +86,28 @@
             },
             async getTweets(){
                 const token = localStorage.getItem(constants.token);
+                console.log(constants.username)
                 const result = await this.$apollo.query({
-                    query: gql`query{
-                        users (token : "${token}") {
+                     query: gql`query{
+                        users (token : "${token}", username : "${constants.username}") {
                             ... on UserField {
-  		                        username
-                                tweets {
-                                    content
+                                subscribedUsers {
+                                    username
+                                    tweets {
+                                        content
+                                    }
                                 }
                             }
                         }
                     }`
                 }); 
-                //var parsedobj = JSON.parse(JSON.stringify(result.data.user));
-                //console.log(parsedobj);
-                this.users = result.data.users;  
-                console.log(this.users)
+
+            
+
+                //var parsedobj = JSON.stringify(result.data.users);
+                //.log(parsedobj);
+                this.subscribedUsers = result.data.users;
+                constants.subscribedUsers = this.subscribedUsers;
             },
             moveToSearchUser(){
                  this.$router.replace({ name: "searchUser" });

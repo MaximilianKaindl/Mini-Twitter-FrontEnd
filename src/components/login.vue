@@ -42,6 +42,7 @@
         },
         methods: {
             async login() {
+                constants.username = this.input.usernameInput;
                 if(this.input.usernameInput != "" && this.input.passwordInput != "") {
                     const result = await this.$apollo.mutate({
                     mutation: gql`mutation($password:String!,$username:String!){
