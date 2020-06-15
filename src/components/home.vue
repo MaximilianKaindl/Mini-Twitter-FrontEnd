@@ -1,8 +1,23 @@
 <template>
-    <b-card
-    title="Home"
-    bg-variant="default"
-    >
+<div>
+    <div>
+        <b-navbar toggleable="lg" type="dark" variant="primary">
+            <b-navbar-brand href="#">NavBar</b-navbar-brand>
+
+            <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <b-nav-item class="nav item active">Home</b-nav-item>
+                <b-nav-item @click="moveToSearchUser()">Search User</b-nav-item>
+                <b-nav-item @click="moveToSettings()">Settings</b-nav-item>
+            </b-navbar-nav>
+            </b-collapse>
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item @click="getTweets()">Sync</b-nav-item>
+            </b-navbar-nav>
+        </b-navbar>    
+    </div> 
+    
+    <p></p>
         <b-row>
             <b-col>
                 <b-input type="text" name="tweet" v-model="input.tweet" placeholder="Was passiert gerade?" />
@@ -30,23 +45,7 @@
                 </div>
             </div>
         </div>
-
-        <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="getTweets()">Sync</b-button>
-            </b-col>
-        </b-row> 
-         <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToSearchUser()">Search User</b-button>
-            </b-col>
-        </b-row> 
-         <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToSettings()">Settings</b-button>
-            </b-col>
-        </b-row> 
-    </b-card>          
+    </div>       
 </template>
 
 <script>
@@ -86,7 +85,7 @@
             },
             async getTweets(){
                 const token = localStorage.getItem(constants.token);
-                console.log(constants.username)
+
                 const result = await this.$apollo.query({
                      query: gql`query{
                         users (token : "${token}", username : "${constants.username}") {
@@ -102,10 +101,6 @@
                     }`
                 }); 
 
-            
-
-                //var parsedobj = JSON.stringify(result.data.users);
-                //.log(parsedobj);
                 this.subscribedUsers = result.data.users;
                 constants.subscribedUsers = this.subscribedUsers;
             },

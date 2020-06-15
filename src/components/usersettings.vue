@@ -1,36 +1,34 @@
 <template>
-    <b-card
-    title="User Settings"
-    bg-variant="default"
-    >
+    <div>
+        <b-navbar toggleable="lg" type="dark" variant="primary">
+            <b-navbar-brand href="#">NavBar</b-navbar-brand>
 
-    <h1>Unsubscribed Users</h1>
-    <div v-for="subUser in subscribedUsers" :key="subUser">             
-            <div v-for="(user, index) in subUser.subscribedUsers" :key="user.username">
+            <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+                <b-nav-item @click="moveToHome()">Home</b-nav-item>
+                <b-nav-item @click="moveToSearch()">Search User</b-nav-item>
+                <b-nav-item class="nav item active">Settings</b-nav-item>
+            </b-navbar-nav>
+            </b-collapse>
+        </b-navbar>
+     
+        <div v-for="subUser in subscribedUsers" :key="subUser">             
+            <div v-for="user in subUser.subscribedUsers" :key="user.username">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{user.username}}</h5>
-                        <b-button v-on:click="unsubscribeUser(user.username, index)">Unsubscribe</b-button>
+                        <b-button v-on:click="unsubscribeUser(user.username)">Unsubscribe</b-button>
                     </div>
                 </div>
             </div>
-        </div>
-        <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToSearch()">Search</b-button>
-            </b-col>
-        </b-row> 
-         <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToHome()">Home</b-button>
-            </b-col>
-        </b-row> 
-    </b-card>          
+        </div>   
+    </div>       
 </template>
 
 <script>
     import constants from '../constants';
     import gql from "graphql-tag";
+
     export default {
         name: 'UserSettings',
         data() {
@@ -39,7 +37,7 @@
             };
         },
          methods: {
-            async unsubscribeUser(searchUsername, index){
+            async unsubscribeUser(unsubUser){
                 await this.$apollo.mutate({
                     mutation: gql`mutation($token:String,$userToUnsubscribe:String){
                         unsubcribeUser (token: $token, userToUnsubscribe:$userToUnsubscribe) {
@@ -48,12 +46,27 @@
                     }`,
                     variables: {
                         token: localStorage.getItem(constants.token),
-                        userToUnsubscribe : searchUsername
+                        userToUnsubscribe : unsubUser
                     },
                 })   
-                
-                constants.subscribedUsers.splice(index);
+                this.getSubscribedUser();
             },   
+            async getSubscribedUser(){
+                const token = localStorage.getItem(constants.token);
+                const result = await this.$apollo.query({
+                     query: gql`query{
+                        users (token : "${token}", username : "${constants.username}") {
+                            ... on UserField {
+                                subscribedUsers {
+                                    username
+                                }
+                            }
+                        }
+                    }`
+                }); 
+                this.subscribedUsers = result.data.users;
+                constants.subscribedUsers = this.subscribedUsers;
+            },
             moveToHome(){
                 this.$router.replace({ name: "home" });
             },
@@ -61,6 +74,10 @@
                 this.$router.replace({ name: "searchUser" });
             }
         },
+        created(){
+            this.getSubscribedUser();
+            console.log("Hallo");
+        }
     }
 </script>
 

@@ -1,35 +1,34 @@
 <template>
-    <b-card
-    title="Search User"
-    bg-variant="default"
-    >
-        <b-row>
-            <b-col>
-                <b-input type="text" name="username" v-model="input.username" placeholder="MiniTwitter durchsuchen" />
-            </b-col>
-        </b-row>
+    <div>
+        <div>
+            <b-navbar toggleable="lg" type="dark" variant="primary">
+                <b-navbar-brand href="#">NavBar</b-navbar-brand>
+
+                <b-collapse id="nav-collapse" is-nav>
+                <b-navbar-nav>
+                    <b-nav-item @click="moveToHome()">Home</b-nav-item>
+                    <b-nav-item class="nav item active">Search User</b-nav-item>
+                    <b-nav-item @click="moveToSettings()">Settings</b-nav-item>
+                </b-navbar-nav>
+                </b-collapse>
+            </b-navbar>
+        </div> 
+        
         <b-row class="mt-3">
             <b-col>
                 <b-button block variant="primary" v-on:click="searchUser()">Search</b-button>
             </b-col>
         </b-row> 
 
-        <li v-for="user in users" :key="user.username">
-            {{ user.username }}
-            <b-button v-on:click="subscribeUser(user.username)">Follow</b-button>
-        </li>
-
-        <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToHome()">Home</b-button>
-            </b-col>
-        </b-row> 
-        <b-row class="mt-3">
-            <b-col>
-                <b-button block variant="primary" v-on:click="moveToSettings()">Settings</b-button>
-            </b-col>
-        </b-row> 
-    </b-card>          
+        <div v-for="user in users" :key="user.username">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{user.username}}</h5>
+                    <b-button v-on:click="subscribeUser(user.username)">Follow</b-button>
+                </div>
+            </div>
+        </div>
+    </div>         
 </template>
 
 <script>
@@ -43,9 +42,7 @@
                 input: {
                     username: ""
                 },
-                users: {
-                    username: ""
-                }
+                users: []               
             };
         },
          methods: {
