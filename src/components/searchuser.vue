@@ -20,11 +20,11 @@
             </b-col>
         </b-row> 
 
-        <div v-for="user in users" :key="user.username">
+        <div v-for="(user, index) in users" :key="user.username">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{user.username}}</h5>
-                    <b-button v-on:click="subscribeUser(user.username)">Follow</b-button>
+                    <b-button v-on:click="subscribeUser(user.username, index)">Follow</b-button>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 input: {
                     username: ""
                 },
-                users: []               
+                users: []           
             };
         },
          methods: {
@@ -60,8 +60,9 @@
                 
                 var parsedobj = JSON.parse(JSON.stringify(result.data.users));
                 this.users = parsedobj;  
+
             },
-            async subscribeUser(searchUsername){
+            async subscribeUser(searchUsername, index){
                 await this.$apollo.mutate({
                     mutation: gql`mutation($token:String,$userToSubscribe:String){
                         subscribeUser (token: $token, userToSubscribe:$userToSubscribe) {
@@ -72,7 +73,8 @@
                         token: localStorage.getItem(constants.token),
                         userToSubscribe : searchUsername
                     },
-                })
+                });
+                this.users.splice(index,1)
             },
             moveToHome(){
                 this.$router.replace({ name: "home" });
