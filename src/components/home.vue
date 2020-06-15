@@ -110,6 +110,9 @@
             moveToSettings(){
                 this.$router.replace({ name: "userSettings" });
             }
+         },
+         created(){
+             this.getTweets();
          }
     }
 </script>

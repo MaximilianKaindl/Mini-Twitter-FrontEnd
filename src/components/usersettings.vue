@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{user.username}}</h5>
-                        <b-button v-on:click="unsubscribeUser(user.username)">Unsubscribe</b-button>
+                        <b-button v-on:click="unsubscribeUser(user.username)">Unfollow</b-button>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,6 @@
         },
         created(){
             this.getSubscribedUser();
-            console.log("Hallo");
         }
     }
 </script>
